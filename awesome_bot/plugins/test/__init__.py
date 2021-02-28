@@ -137,7 +137,6 @@ async def handle_first_custom(bot: Bot, event: Event, state: T_State):
     error_count[event.get_user_id()] = 0
     timeout[event.get_user_id()] = time.time()
     await custom.send(message="信息记录开始，当你要结束记录时，自行截图聊天记录发送给墙墙，在最后一条消息发送消息类型（如吐槽条，寻人条，感慨条等），然后再请输入“结束记录”（文字图片不要发在一起），截图只要一张，如果消息太多，请长截图！")
-    # await custom.send(message="测试测试")
 
 
 @custom.receive()

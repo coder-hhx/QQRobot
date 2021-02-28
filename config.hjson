@@ -16,7 +16,7 @@
     bucket_size: 1
   }
   ignore_invalid_cqcode: false
-  force_fragmented: false
+  force_fragmented: true
   heartbeat_interval: 0
   http_config: {
     enabled: false

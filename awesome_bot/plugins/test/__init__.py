@@ -64,12 +64,7 @@ async def handle_first_receive(bot: Bot, event: Event, state: T_State):
         state['type'] = 'custom'
         error_count[event.get_user_id()] = 0
         timeout[event.get_user_id()] = time.time()
-        try:
-            await msg.send(
-                message="信息记录开始，当你要结束记录时，自行截图聊天记录发送给墙墙，在最后一条消息发送消息类型（如吐槽条，寻人条，感慨条等），然后再请输入“结束记录”（文字图片不要发在一起），截图只要一张，如果消息太多，请长截图！")
-        except ActionFailed as e:
-            logger.error(e)
-            return
+        await msg.send(message="信息记录开始，当你要结束记录时，自行截图聊天记录发送给墙墙，再发送消息类型（如吐槽条，寻人条等），然后再输入“结束记录”（文字图片分开发送），截图只要一张，如果消息太多，请长截图！")
     else:
         await msg.finish("请输入下列选项：\r1.自助表白\r2.自助祝福\r3.自定义信息\r(*￣︶￣)")
 
@@ -95,7 +90,7 @@ async def handle_image(bot: Bot, event: Event, state: T_State):
             if state.get("confirm"):
                 if event.get_message()[0].data['text'] == "确认发送":
                     # ret = download_img(state['image_url'], event.get_user_id())
-                    await msg.finish('测试完成')
+                    await msg.finish('表白成功！(#^.^#)')
                 else:
                     error_count[event.get_user_id()] += 1
                     if error_count[event.get_user_id()] > 3:
@@ -123,7 +118,7 @@ async def handle_image(bot: Bot, event: Event, state: T_State):
             if state.get("confirm"):
                 if event.get_message()[0].data['text'] == "确认发送":
                     # ret = download_img(state['image_url'], event.get_user_id())
-                    await msg.finish('测试完成')
+                    await msg.finish('祝福成功！(#^.^#)')
                 else:
                     error_count[event.get_user_id()] += 1
                     if error_count[event.get_user_id()] > 3:
@@ -153,7 +148,7 @@ async def handle_image(bot: Bot, event: Event, state: T_State):
             if state.get("confirm"):
                 if event.get_message()[0].data['text'] == "确认发送自定义信息":
                     # ret = download_img(state['image_url'], event.get_user_id())
-                    await msg.finish('测试完成')
+                    await msg.finish('发布成功！(#^.^#)')
                 else:
                     error_count[event.get_user_id()] += 1
                     if error_count[event.get_user_id()] > 3:

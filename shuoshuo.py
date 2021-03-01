@@ -13,7 +13,7 @@ import time
 import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-
+from selenium.webdriver.common.action_chains import ActionChains
 ##因为用到模拟浏览器，需要调用浏览程序
 chromedriver = r"C:\Users\10219\Desktop\chromedriver.exe"
 # option = webdriver.ChromeOptions()
@@ -36,13 +36,18 @@ if a == True:
     driver.find_element_by_id('p').clear()
     driver.find_element_by_id('p').send_keys('hhx15966884268')
     driver.find_element_by_id('login_button').click()
-    time.sleep(10)
+    time.sleep(5)
 
     ##找到发说说按钮，进行点击
     driver.find_element_by_id("$1_substitutor_content").click()
     driver.find_element_by_id("$1_content_content").send_keys("表白条")
-    driver.find_element_by_xpath(
-        "/html[@class='skin-light']/body[@class='os-winxp bg-body date-20210301']/div[@id='layBackground']/div[@class='layout-background']/div[@class='layout-body']/div[@id='pageContent']/div[@id='main_feed_container']/div[@class='col-main-feed']/div[@id='QM_Mood_Poster_Container']/div[@id='QM_Mood_Poster_Inner']/div[@class='qz-poster-inner qz-poster-2021-03-01']/div[@class='qz-poster-ft']/div[@class='op']/a[@class='btn-post gb_bt  evt_click']").click()
+    element_to_hover_over = driver.find_element_by_xpath("//div[@id='qz_poster_v4_editor_container_1']/div[@class='qz-poster-attach-side']/div[@class='attach']/div[@class='item bor3 bg4 item-pic  evt_hover']/a[@class='pic']")
+    print(element_to_hover_over)
+    hover = ActionChains(driver).move_to_element(element_to_hover_over)
+    hover.perform()
+    time.sleep(3)
+    driver.find_element_by_xpath("/html[@class='skin-light']/body[@class='os-winxp bg-body date-20210301']/div[@id='layBackground']/div[@class='layout-background']/div[@class='layout-body']/div[@id='pageContent']/div[@id='main_feed_container']/div[@class='col-main-feed']/div[@id='QM_Mood_Poster_Container']/div[@id='QM_Mood_Poster_Inner']/div[@class='qz-poster-inner qz-poster-2021-03-01']/div[@class='qz-poster-bd']/div[@id='qz_poster_v4_editor_container_1']/div[@class='qz-poster-attach-side']/div[@class='img-upload-drop cell-2']/div[@class='pop-drop bg4 bor2']/ul[@class='list']/li[@class='bor3 evt_click evt_hover qz_poster_btn_local_pic on']/a[@class='c_tx3']").click()
+    # driver.find_element_by_xpath("/html[@class='skin-light']/body[@class='os-winxp bg-body date-20210301']/div[@id='layBackground']/div[@class='layout-background']/div[@class='layout-body']/div[@id='pageContent']/div[@id='main_feed_container']/div[@class='col-main-feed']/div[@id='QM_Mood_Poster_Container']/div[@id='QM_Mood_Poster_Inner']/div[@class='qz-poster-inner qz-poster-2021-03-01']/div[@class='qz-poster-ft']/div[@class='op']/a[@class='btn-post gb_bt  evt_click']").click()
     time.sleep(2)
 try:
     driver.switch_to.frame('app_canvas_frame')  # 进入iFrame

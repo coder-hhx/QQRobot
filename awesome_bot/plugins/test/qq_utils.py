@@ -132,7 +132,10 @@ def post_shuoshuo(content, image_name):
 
     response = s.post(upload_image_url, headers=headers, data=img)
 
-    resp = json.loads(re.findall(r'frameElement.callback\(({.*})\)', response.text)[0])
+    resp_txt = response.text.replace('\n', '')
+
+    resp = json.loads(re.findall(r'frameElement.callback\(({.*})\)', resp_txt)[0])
+    print(resp)
 
     if resp.get("ret") != 0:
         return False

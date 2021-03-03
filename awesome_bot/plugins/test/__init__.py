@@ -5,9 +5,11 @@ import time
 from venv import logger
 
 from nonebot import get_driver
-from nonebot.adapters.cqhttp import MessageSegment
+from nonebot.adapters.cqhttp import MessageSegment, Event, Bot, Message
 from nonebot.exception import ActionFailed
-
+from nonebot import on_message, on_command
+from nonebot.rule import command, to_me
+from nonebot.typing import T_State
 from .config import Config
 from .qq_utils import qq_login, post_shuoshuo
 
@@ -23,11 +25,6 @@ config = Config(**global_config.dict())
 #     pass
 
 
-from nonebot import on_message, on_command
-from nonebot.rule import command, to_me
-from nonebot.typing import T_State
-from nonebot.adapters import Bot, Event, Message
-
 img_path = "F:/personal/QQRobot/images/"
 
 msg = on_command('', rule=to_me(), priority=1)
@@ -37,7 +34,9 @@ error_count = {}
 timeout = {}
 # qq_login()
 
-count = [0]
+count = [1]
+
+login_time = time.time() + 60
 
 
 def download_img(img_url, img_name):
@@ -55,6 +54,10 @@ def download_img(img_url, img_name):
 
 @msg.handle()
 async def handle_first_receive(bot: Bot, event: Event, state: T_State):
+    error_count[event.get_user_id()] = 0
+    print(event.get_plaintext(), event.time, login_time)
+    if event.time < login_time:
+        await msg.finish()
     if event.get_plaintext() == "自助表白":
         state['type'] = 'biaobai'
         error_count[event.get_user_id()] = 0
@@ -71,6 +74,10 @@ async def handle_first_receive(bot: Bot, event: Event, state: T_State):
         timeout[event.get_user_id()] = time.time()
         await msg.send(
             message="信息记录开始，当你要结束记录时，自行截图聊天记录发送给墙墙，再发送消息类型（如吐槽条，寻人条等），然后再输入“结束记录”（文字图片分开发送），截图只要一张，如果消息太多，请长截图！")
+    elif event.get_plaintext() == "更新序号":
+        state['type'] = 'update_num'
+        timeout[event.get_user_id()] = time.time()
+        await msg.send(message="请输入更新后的序号")
     else:
         await msg.finish("请输入下列选项：\r1.自助表白\r2.自助祝福\r3.自定义信息\r(*￣︶￣)")
 
@@ -79,7 +86,23 @@ async def handle_first_receive(bot: Bot, event: Event, state: T_State):
 async def handle_image(bot: Bot, event: Event, state: T_State):
     if time.time() - timeout[event.get_user_id()] > 300:
         await msg.finish("请输入下列选项：\r1.自助表白\r2.自助祝福\r3.自定义信息\r(*￣︶￣)")
-    if state['type'] == 'biaobai':
+    if state['type'] == 'update_num':
+        try:
+            num = int(event.get_plaintext())
+            count[0] = num
+            flag = True
+        except Exception as e:
+            print(event.get_plaintext(), e)
+            flag = False
+        if flag:
+            await msg.finish('序号更新成功，更新后序号为：{}'.format(count[0]))
+        else:
+            error_count[event.get_user_id()] += 1
+            if error_count[event.get_user_id()] > 3:
+                await msg.finish('错误次数过多，结束更新o(╥﹏╥)o')
+            else:
+                await msg.reject('序号格式错误，请输入数字')
+    elif state['type'] == 'biaobai':
         if event.get_message()[0].type == "image":
             state['image_url'] = event.get_message()[0].data.get('url')
             await msg.reject()
@@ -96,10 +119,8 @@ async def handle_image(bot: Bot, event: Event, state: T_State):
             if state.get("confirm"):
                 if event.get_message()[0].data['text'] == "确认发送":
                     img_name = download_img(state['image_url'], event.get_user_id())
+                    post_shuoshuo("第{}条\n表白条".format(count[0]), img_name)
                     count[0] += 1
-                    if not post_shuoshuo("第{}条\r表白条".format(count[0]), img_name):
-                        qq_login()
-                        post_shuoshuo("第{}条\r表白条".format(count[0]), img_name)
                     os.remove(img_name)
                     await msg.finish('表白成功！(#^.^#)')
                 else:
@@ -129,10 +150,8 @@ async def handle_image(bot: Bot, event: Event, state: T_State):
             if state.get("confirm"):
                 if event.get_message()[0].data['text'] == "确认发送":
                     img_name = download_img(state['image_url'], event.get_user_id())
+                    post_shuoshuo("第{}条\n祝福条".format(count[0]), img_name)
                     count[0] += 1
-                    if not post_shuoshuo("第{}条\r祝福条".format(count[0]), img_name):
-                        qq_login()
-                        post_shuoshuo("第{}条\r祝福条".format(count[0]), img_name)
                     os.remove(img_name)
                     await msg.finish('祝福成功！(#^.^#)')
                 else:
@@ -152,12 +171,15 @@ async def handle_image(bot: Bot, event: Event, state: T_State):
         elif event.get_message()[0].type == "text":
             if event.get_message()[0].data['text'] == "结束记录":
                 if state.get("image_url"):
-                    state['confirm'] = True
-                    message = Message()
-                    message.append(MessageSegment.image(state['image_url']))
-                    state['final'] = state['msg_type']
-                    message.append(MessageSegment.text(state['msg_type'] + "\r输入“确认发送自定义信息”将发送以上信息到校园墙"))
-                    await msg.reject(message)
+                    if not state.get("msg_type"):
+                        await msg.reject("请输入消息类型")
+                    else:
+                        state['confirm'] = True
+                        message = Message()
+                        message.append(MessageSegment.image(state['image_url']))
+                        state['final'] = state['msg_type']
+                        message.append(MessageSegment.text(state['msg_type'] + "\r输入“确认发送自定义信息”将发送以上信息到校园墙"))
+                        await msg.reject(message)
                 else:
                     await msg.finish("未检测到图片，自定义信息结束ヾ(￣▽￣)Bye~Bye~")
             else:
@@ -165,10 +187,8 @@ async def handle_image(bot: Bot, event: Event, state: T_State):
             if state.get("confirm"):
                 if event.get_message()[0].data['text'] == "确认发送自定义信息":
                     img_name = download_img(state['image_url'], event.get_user_id())
+                    post_shuoshuo("第{}条\n{}".format(count[0], state['final']), img_name)
                     count[0] += 1
-                    if not post_shuoshuo("第{}条\r{}".format(count[0], state['final']), img_name):
-                        qq_login()
-                        post_shuoshuo("第{}条\r{}".format(count[0], state['final']), img_name)
                     os.remove(img_name)
                     await msg.finish('发布成功！(#^.^#)')
                 else:

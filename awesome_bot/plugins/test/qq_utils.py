@@ -6,14 +6,15 @@ from selenium import webdriver
 import requests, time, json
 import threading
 
-login_uin = '2944208466'  # 登录qq
-pwd = 'xf210398'  # 登录密码
+login_uin = '251364816'  # 登录qq
+pwd = 'woyaonuli0909'  # 登录密码
 
 s = requests.Session()
 
 cookies_ = {}
 g_tk = [""]
-c_s = "pgv_pvi=9817097216; RK=RD7xq0tZPk; ptcz=672b14695d9766a17c3f1432a205bfd8cd485b631a687cf8b23787de8a6e9537; tvfe_boss_uuid=349f9ce14790623d; pgv_pvid=220366552; pac_uid=0_5e8c3612e6829; eas_sid=M1Y6K1b4K3G9p079x3s4D5C3D8; uin_cookie=o1021969591; ied_qq=o1021969591; LOLWebSet_AreaBindInfo_1021969591=%257B%2522areaid%2522%253A%25222%2522%252C%2522areaname%2522%253A%2522%25E6%25AF%2594%25E5%25B0%2594%25E5%2590%2589%25E6%25B2%2583%25E7%2589%25B9%2520%25E7%25BD%2591%25E9%2580%259A%2522%252C%2522sRoleId%2522%253A0%252C%2522roleid%2522%253A%25221021969591%2522%252C%2522rolename%2522%253A%2522%25E5%2593%258E%25E5%2591%2580%25E8%25B5%25B7%25E4%25BB%2580%25E4%25B9%2588%25E5%2590%258D%25E5%2591%25A2%2522%252C%2522checkparam%2522%253A%2522lol%257Cyes%257C1021969591%257C2%257C1021969591*%257C%257C%257C%257C%2525E5%252593%25258E%2525E5%252591%252580%2525E8%2525B5%2525B7%2525E4%2525BB%252580%2525E4%2525B9%252588%2525E5%252590%25258D%2525E5%252591%2525A2*%257C%257C%257C1614390966%257C%2522%252C%2522md5str%2522%253A%25226CE6EBD36ABC28CF840E3AC9BAC8FE90%2522%252C%2522roleareaid%2522%253A%25222%2522%252C%2522sPartition%2522%253A%25222%2522%257D; qz_screen=1920x1080; QZ_FE_WEBP_SUPPORT=1; __Q_w_s__QZN_TodoMsgCnt=1; __Q_w_s_hat_seed=1; pt_sms_phone=176******67; Loading=Yes; ptui_loginuin=2944208466; cpu_performance_v8=42; _qpsvr_localtk=0.5391092440024532; pgv_info=ssid=s9015692268; uin=o2944208466; skey=@RuyCS951Z; p_uin=o2944208466; pt4_token=qsQSjOKVC2FnqwIbP*h6*NoFIHGylsTnAH8A2YBYXM0_; p_skey=vnvtcUrgxDyugNaHppAD4OivE0S9FpMGQm9NnjA1T6A_"
+# c_s = "pgv_pvi=9817097216; RK=RD7xq0tZPk; ptcz=672b14695d9766a17c3f1432a205bfd8cd485b631a687cf8b23787de8a6e9537; tvfe_boss_uuid=349f9ce14790623d; pgv_pvid=220366552; pac_uid=0_5e8c3612e6829; eas_sid=M1Y6K1b4K3G9p079x3s4D5C3D8; uin_cookie=o1021969591; ied_qq=o1021969591; LOLWebSet_AreaBindInfo_1021969591=%257B%2522areaid%2522%253A%25222%2522%252C%2522areaname%2522%253A%2522%25E6%25AF%2594%25E5%25B0%2594%25E5%2590%2589%25E6%25B2%2583%25E7%2589%25B9%2520%25E7%25BD%2591%25E9%2580%259A%2522%252C%2522sRoleId%2522%253A0%252C%2522roleid%2522%253A%25221021969591%2522%252C%2522rolename%2522%253A%2522%25E5%2593%258E%25E5%2591%2580%25E8%25B5%25B7%25E4%25BB%2580%25E4%25B9%2588%25E5%2590%258D%25E5%2591%25A2%2522%252C%2522checkparam%2522%253A%2522lol%257Cyes%257C1021969591%257C2%257C1021969591*%257C%257C%257C%257C%2525E5%252593%25258E%2525E5%252591%252580%2525E8%2525B5%2525B7%2525E4%2525BB%252580%2525E4%2525B9%252588%2525E5%252590%25258D%2525E5%252591%2525A2*%257C%257C%257C1614390966%257C%2522%252C%2522md5str%2522%253A%25226CE6EBD36ABC28CF840E3AC9BAC8FE90%2522%252C%2522roleareaid%2522%253A%25222%2522%252C%2522sPartition%2522%253A%25222%2522%257D; qz_screen=1920x1080; QZ_FE_WEBP_SUPPORT=1; __Q_w_s__QZN_TodoMsgCnt=1; __Q_w_s_hat_seed=1; pt_sms_phone=176******67; Loading=Yes; ptui_loginuin=2944208466; cpu_performance_v8=42; _qpsvr_localtk=0.5391092440024532; pgv_info=ssid=s9015692268; uin=o2944208466; skey=@RuyCS951Z; p_uin=o2944208466; pt4_token=qsQSjOKVC2FnqwIbP*h6*NoFIHGylsTnAH8A2YBYXM0_; p_skey=vnvtcUrgxDyugNaHppAD4OivE0S9FpMGQm9NnjA1T6A_"
+c_s = "pgv_pvi=3534080000; RK=XD7xu0tSYm; ptcz=914d1ffe7dc0ee2b6e8e6f154d2a6dabb839852bf0882ae71351c49b5011e552; pgv_pvid=8415104388; pac_uid=0_7a5ddfdc631be; iip=0; ptui_loginuin=1021969591; qz_screen=1920x1080; QZ_FE_WEBP_SUPPORT=1; cpu_performance_v8=1; __Q_w_s_hat_seed=1; __Q_w_s__QZN_TodoMsgCnt=1; _qpsvr_localtk=0.24922552640578344; pgv_info=ssid=s2919265430; rv2=80C1D95222D3EC717F7D43A359AC31442080874E758D145E88; property20=A8433780BEBB365941759268945B55B8CE0DA5BF860596F18EBD74D03F683E6F1407B5E288D8A5AE; uin=o0251364816; skey=@wVptSizGk; p_uin=o0251364816; pt4_token=fuxCVE1hjYgR6Gt*dvhuvWQ8MxRZOXYt2IoWkYS6oac_; p_skey=9G5p24NQNlw10kPNpLRv5UTMO*0zoi0fUqrAjp-o8Cg_; Loading=Yes; 251364816_todaycount=0; 251364816_totalcount=12"
 
 
 # 实例化出浏览器开始登录
@@ -61,10 +62,11 @@ def qq_login():
 
 
 def keep_login():
-    qzone_url = "https://user.qzone.qq.com/2944208466"
+    qzone_url = "https://user.qzone.qq.com/{}".format(login_uin)
 
     headers = {
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36",
+        # "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36",
         # "cookie": ";".join([k + "=" + v for k, v in cookies_.items()])
         "cookie": c_s
     }
@@ -87,7 +89,8 @@ def post_shuoshuo(content, image_name):
     g_tk[0] = str(2147483647 & e)
     upload_image_url = "https://up.qzone.qq.com/cgi-bin/upload/cgi_upload_image?g_tk={}&&g_tk={}".format(g_tk[0],
                                                                                                          g_tk[0])
-    img_path = r"/var/QQ/{}".format(image_name)
+    # img_path = r"/var/qqrobot_test/{}".format(image_name)
+    img_path = r"C:\Users\10219\Desktop\QQRobot\{}".format(image_name)
     f = open(img_path, 'rb')  # 二进制方式打开图文件
     ls_f = base64.b64encode(f.read())  # 读取文件内容，转换为base64编码
     f.close()
@@ -126,12 +129,13 @@ def post_shuoshuo(content, image_name):
 
     headers = {
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36",
+        # "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36",
         # "cookie": ";".join([k + "=" + v for k, v in cookies_.items()])
         "cookie": c_s
     }
 
     response = s.post(upload_image_url, headers=headers, data=img)
-
+    print(response.content.decode('gbk'))
     resp_txt = response.text.replace('\n', '')
 
     resp = json.loads(re.findall(r'frameElement.callback\(({.*})\)', resp_txt)[0])

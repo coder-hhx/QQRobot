@@ -1,6 +1,6 @@
 {
-  uin: 2944208466
-  password: "xf210398"
+  uin: 251364816
+  password: "woyaonuli0909"
   encrypt_password: false
   password_encrypted: ""
   enable_db: false
@@ -33,7 +33,7 @@
   ws_reverse_servers: [
     {
       enabled: true
-      reverse_url: ws://127.0.0.1:8080/cqhttp/ws
+      reverse_url: ws://127.0.0.1:8081/cqhttp/ws
       reverse_api_url: ws://you_websocket_api.server
       reverse_event_url: ws://you_websocket_event.server
       reverse_reconnect_interval: 1000
